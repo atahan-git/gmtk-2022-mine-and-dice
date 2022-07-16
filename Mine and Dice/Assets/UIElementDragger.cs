@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -12,14 +13,29 @@ public class UIElementDragger : MonoBehaviour, IPointerDownHandler, IPointerUpHa
 	public GameObject shadow;
 	private float baseZ;
 
+	public bool skipHit = false;
+
 	private void Start() {
 		baseZ = transform.position.z;
 		shadow.transform.SetParent(ShadowFieldReference.s.transform);
 	}
 
+	private void OnEnable() {
+		Invoke(nameof(DelayedEnable), 0.05f);
+	}
+
+	void DelayedEnable() {
+		DieRayCaster.s.UIStuff.Add(this);
+		
+	}
+
+	private void OnDisable() {
+		DieRayCaster.s.UIStuff.Remove(this);
+	}
+
 	public void Update() {
 		var targetPos = transform.position;
-		print(targetPos);
+		//print(targetPos);
 		if (dragging) {
 			targetPos = GetMouseWorldPoint() + mouseOffset;
 			curZOffset = Mathf.Lerp(curZOffset, carryZOffset, zLerpSpeed * Time.deltaTime);
@@ -34,9 +50,12 @@ public class UIElementDragger : MonoBehaviour, IPointerDownHandler, IPointerUpHa
 	}
 
 	private Vector3 mouseOffset;
+
 	public void OnPointerDown(PointerEventData eventData) {
-		mouseOffset = transform.position - GetMouseWorldPoint();
-		dragging = true;
+		if (!skipHit) {
+			mouseOffset = transform.position - GetMouseWorldPoint();
+			dragging = true;
+		}
 	}
 
 	public void OnPointerUp(PointerEventData eventData) {

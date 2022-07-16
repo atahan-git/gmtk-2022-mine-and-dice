@@ -25,16 +25,20 @@ public class ItemCarrier : MonoBehaviour {
     }
 
     public bool isSnapping = false;
-    public DieBoxScript currentSnap;
+    public ItemBox currentSnap;
 
-    public void SnapToTarget(DieBoxScript target) {
+    public ItemType myType;
+
+    public ItemCarrier SnapToTarget(ItemBox target) {
         ClearSnapping(null);
         isSnapping = true;
+        rg.isKinematic = true;
         currentSnap = target;
         shadow.SetActive(false);
+        return this;
     }
 
-    public void ClearSnapping(DieBoxScript source) {
+    public void ClearSnapping(ItemBox source) {
         if (currentSnap == source) {
             isSnapping = false;
             shadow.SetActive(true);
@@ -76,14 +80,16 @@ public class ItemCarrier : MonoBehaviour {
         if(currentlyBeingCarried != null)
             currentlyBeingCarried.OnMouseUp();
         
-        die.AlignRotation();
+        if(die!= null)
+            die.AlignRotation();
 
         currentlyBeingCarried = this;
     }
 
     public void OnMouseUp() {
         dragging = false;
-        rg.isKinematic = false;
+        if(!isSnapping)
+            rg.isKinematic = false;
 
         if (currentlyBeingCarried == this)
             currentlyBeingCarried = null;

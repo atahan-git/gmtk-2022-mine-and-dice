@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class DieScript : MonoBehaviour {
-    public bool isPlayerDie = false;
-
     public float maxAngularVelocity = 25;
 
     [HideInInspector] public Rigidbody rg;
@@ -24,10 +22,10 @@ public class DieScript : MonoBehaviour {
 
     public bool affectedByPhysics = true;
 
-    public float moveSpeed = 4f;
-
     private float diceSize;
 
+    public DieFaceCollection myFaces;
+    
     private void Awake() {
         rg = GetComponent<Rigidbody>();
         rg.maxAngularVelocity = maxAngularVelocity;
@@ -65,25 +63,6 @@ public class DieScript : MonoBehaviour {
     public Vector3 GetDieBoxSnapPosition() {
         return myDieBox.position + myDieBox.forward*(diceSize/2f);
     }
-
-    class PositionWrapper{
-        private readonly bool isDieBox;
-        private readonly Transform target;
-        private readonly float diceSize;
-        public PositionWrapper(Transform _target, bool _isDieBox, float _diceSize) {
-            target = _target;
-            isDieBox = _isDieBox;
-            diceSize = _diceSize;
-        }
-
-        public Vector3 GetPosition() {
-            if (isDieBox) {
-                return target.position + target.forward*(diceSize/2f);
-            } else {
-                return target.position;
-            }
-        }
-    }
     
     public bool canDiceRoll {
         get { return !(isInBox || isMoving); }
@@ -91,6 +70,8 @@ public class DieScript : MonoBehaviour {
 
     public float curRollDetectionCooldown = 0;
     public float rollDetectionCooldown = 0.2f;
+
+    public float moveSpeed = 20f;
 
     public bool isMoving = false;
 
@@ -129,6 +110,79 @@ public class DieScript : MonoBehaviour {
         }
         return diceValue;
     }
+    
+    class PositionWrapper{
+        private readonly bool isDieBox;
+        private readonly Transform target;
+        private readonly float diceSize;
+        public PositionWrapper(Transform _target, bool _isDieBox, float _diceSize) {
+            target = _target;
+            isDieBox = _isDieBox;
+            diceSize = _diceSize;
+        }
+
+        public Vector3 GetPosition() {
+            if (isDieBox) {
+                return target.position + target.forward*(diceSize/2f);
+            } else {
+                return target.position;
+            }
+        }
+    }
+
+    private bool isLocked = false;
+    public void LockRotation(bool _isLocked) {
+        
+        if(isLocked == _isLocked)
+            return;
+
+        isLocked = _isLocked;
+        
+        RigidbodyConstraints constraints;
+        if (isLocked) {
+            constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
+        } else {
+            constraints = RigidbodyConstraints.None;
+        }
+
+        rg.constraints = constraints;
+    }
+    
+    public void SnapDieIntoField() {
+        isMoving = true;
+        isInBox = false;
+        StartCoroutine(MoveToPosition(new PositionWrapper(GetEmptyFieldPosition(), false, diceSize), true));
+    }
+    
+    IEnumerator MoveToPosition(PositionWrapper pos, bool enablePhysicsAfter) {
+        OnlyShowActiveFace(false);
+        isMoving = true;
+        TogglePhysics(false);
+
+        yield return null;
+        float time = Vector3.Distance(transform.position, pos.GetPosition()) / moveSpeed;
+        Quaternion rot = alignedRotations[GetActiveSideIndex()];
+        float rotSpeed = Quaternion.Angle(transform.rotation, rot)/time;
+
+
+        while (time > 0) {
+            transform.position = Vector3.MoveTowards(transform.position, pos.GetPosition(), moveSpeed * Time.deltaTime);
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rotSpeed * Time.deltaTime);
+            time -= Time.deltaTime;
+            yield return null;
+        }
+
+        transform.position = pos.GetPosition();
+        transform.rotation = rot;
+
+
+        if (enablePhysicsAfter) {
+            TogglePhysics(true);
+        } else {
+            OnlyShowActiveFace(true);
+        }
+        isMoving = false;
+    }
 
 
     private readonly Quaternion[] alignedRotations = new[] {
@@ -159,20 +213,20 @@ public class DieScript : MonoBehaviour {
 
         transform.rotation = rot;
     }
-
-    void OnlyShowActiveFace(bool isOn) {
-        /*if (isOn) {
-            var faces = myFaces.GetFaces();
+    
+    public void OnlyShowActiveFace(bool isOn) {
+        if (isOn) {
+            var faces = myFaces.myFaces;
             for (int i = 0; i < faces.Length; i++) {
                 faces[i].gameObject.SetActive(false);
             }
 
             faces[GetActiveSideIndex()].gameObject.SetActive(true);
         } else {
-            var faces = myFaces.GetFaces();
+            var faces = myFaces.myFaces;
             for (int i = 0; i < faces.Length; i++) {
                 faces[i].gameObject.SetActive(true);
             }
-        }*/
+        }
     }
 }
