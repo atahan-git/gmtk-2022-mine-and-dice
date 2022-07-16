@@ -10,21 +10,11 @@ public class SceneLoader : MonoBehaviour {
     public Camera ScreenSpaceCanvasCamera;
     
     [SerializeField]
-    private SceneReference mainMenu;
-    
-    public SceneReference playScene;
+    private SceneReference mainScene;
     
     [SerializeField]
     private SceneReference initialScene;
 
-    public bool isLevelStarted = false;
-    public bool isLevelFinished = false;
-
-    public bool isLevelInProgress {
-        get {
-            return isLevelStarted && !isLevelFinished;
-        }
-    }
 
     public bool isProfileMenu = true;
     
@@ -34,7 +24,7 @@ public class SceneLoader : MonoBehaviour {
             DontDestroyOnLoad(gameObject);
 
             if (SceneManager.GetActiveScene().path == initialScene.ScenePath) {
-                LoadScene(mainMenu);
+                LoadScene(mainScene);
             } else {
                 loadingScreen.SetActive(false);
             }
@@ -47,19 +37,7 @@ public class SceneLoader : MonoBehaviour {
 
     public GameObject loadingScreen;
     public CanvasGroup canvasGroup;
-
-
     
-    public void LoadMenuScene() {
-        isLevelFinished = false;
-        isLevelStarted = false;
-        isProfileMenu = false;
-        LoadScene(mainMenu);
-    }
-
-    public void LoadPlayScene() {
-        LoadScene(playScene);
-    }
 
     public static float loadingProgress;
     public bool isLoading = false;
