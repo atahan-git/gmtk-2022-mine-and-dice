@@ -13,7 +13,7 @@ public class DiceMaster : MonoBehaviour {
         s = this;
     }
 
-    public List<DieScript> myDice = new List<DieScript>();
+    public List<DieScript> allDice = new List<DieScript>();
 
     public GameObject diceRollArea;
     public Vector3 gravityDirection;
@@ -37,25 +37,23 @@ public class DiceMaster : MonoBehaviour {
 
     public FieldDiceSlot[] fieldDiceSlots;
 
-    public List<DieScript> allDice = new List<DieScript>();
-
     private void Start() {
         //allDice = new List<DieScript>(GameObject.FindObjectsOfType<DieScript>());
     }
 
 
     void FixedUpdate() {
-        for (int i = 0; i < myDice.Count; i++) {
-            if (myDice[i].affectedByPhysics) {
-                myDice[i].rg.AddForce(diceRollArea.transform.TransformDirection(gravityDirection) * gravityStrength * Time.fixedDeltaTime);
+        for (int i = 0; i < allDice.Count; i++) {
+            if (allDice[i].affectedByPhysics) {
+                allDice[i].rg.AddForce(diceRollArea.transform.TransformDirection(gravityDirection) * gravityStrength * Time.fixedDeltaTime);
             }
         }
     }
 
     private void Update() {
         isRolling = false;
-        for (int i = 0; i < myDice.Count; i++) {
-            isRolling = isRolling || myDice[i].isRolling;
+        for (int i = 0; i < allDice.Count; i++) {
+            isRolling = isRolling || allDice[i].isRolling;
         }
 
         if (isRolling) {
@@ -63,6 +61,12 @@ public class DiceMaster : MonoBehaviour {
 
             if (curRollTime > rollTimeout) {
                 isRolling = false;
+            }
+        }
+
+        if (!isRolling) {
+            for (int i = 0; i < allDice.Count; i++) {
+                allDice[i].LockRotation(true);
             }
         }
     }
@@ -92,6 +96,7 @@ public class DiceMaster : MonoBehaviour {
         for (int i = 0; i < allDice.Count; i++) {
             var die = allDice[i];
             if (die.canDiceRoll) {
+                die.LockRotation(false);
                 var randomJumpForce = diceRollArea.transform.TransformDirection(-gravityDirection) * Random.Range(jumpStrength.x, jumpStrength.y);
                 die.rg.AddForce(randomJumpForce);
                 var midPush = (diceRollArea.transform.position - die.transform.position);
@@ -132,7 +137,7 @@ public class DiceMaster : MonoBehaviour {
 
     public void PutDiceInTheRollField() {
         for (int i = 0; i < allDice.Count; i++) {
-            //allDice[i].SnapDieIntoField();
+            allDice[i].SnapDieIntoField();
 
         }
 
@@ -150,4 +155,9 @@ public class DiceMaster : MonoBehaviour {
 
 public enum DieAffinity {
     mining, chopping, attacking
+}
+
+
+public enum ItemType {
+    die, ingredient, tool
 }
