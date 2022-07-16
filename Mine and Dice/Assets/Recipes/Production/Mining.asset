@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdc417e053fb08a4196fcba9534a71fc, type: 3}
+  m_Name: Mining
+  m_EditorClassIdentifier: 
+  myResults:
+  - item: {fileID: 8104755788530655231, guid: 241e116fce1922e40a14f2f361dae1d3, type: 3}
+    chance: 100
+  - item: {fileID: 5752572552929383996, guid: 122a46d6455fb5a40bcd1ed48138d54c, type: 3}
+    chance: 50
+  - item: {fileID: 7739468074622090142, guid: 6c58325adde37ad40a1793cc0cfcbd43, type: 3}
+    chance: 10
+  - item: {fileID: 8135479786439004835, guid: 54e645f25a6fe314d993ba833e82989e, type: 3}
+    chance: 1

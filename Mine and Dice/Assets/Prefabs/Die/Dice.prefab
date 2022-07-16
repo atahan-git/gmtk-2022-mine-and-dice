@@ -287,11 +287,23 @@ MonoBehaviour:
   uprightSensitivity: 0.9
   affectedByPhysics: 1
   myFaces: {fileID: 5385253322948780861}
+  myDie:
+    color: {r: 1, g: 1, b: 1, a: 1}
+    faces:
+    - pips: 1
+    - pips: 2
+    - pips: 3
+    - pips: 4
+    - pips: 5
+    - pips: 6
+    myAffinity: 0
+    gfx: {fileID: 0}
   myDieBox: {fileID: 0}
   curRollDetectionCooldown: 0
   rollDetectionCooldown: 0.2
   moveSpeed: 20
   isMoving: 0
+  canDieStillBeActivated: 1
 --- !u!54 &-2629102868183784698
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -354,6 +366,8 @@ MonoBehaviour:
   isSnapping: 0
   currentSnap: {fileID: 0}
   myType: 0
+  myIngredientType: 0
+  isLockedInSlot: 0
 --- !u!114 &5385253322948780861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -366,7 +380,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1954083f8146f8941a906688e1680611, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  myFaces:
+  faces:
   - {fileID: 7936847496948609290}
   - {fileID: 351938388006230690}
   - {fileID: 351938387168964512}
@@ -380,10 +394,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5867930011684578217}
     m_Modifications:
-    - target: {fileID: 111433340590879103, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: b0d2caa8f24175244a396e88a457bcd7, type: 3}
     - target: {fileID: 1741473079889392345, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -428,37 +438,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5464052945117513918, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5733846899961626634, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7470657607671868024, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7470657607671868024, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694134595125428347, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694134595125428349, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Color.b
-      value: 0.1764706
-      objectReference: {fileID: 0}
     - target: {fileID: 8191966170685041812, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
       propertyPath: m_Name
       value: Dice Face
-      objectReference: {fileID: 0}
-    - target: {fileID: 8191966170685041812, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
@@ -485,10 +467,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5867930011684578217}
     m_Modifications:
-    - target: {fileID: 111433340590879103, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 9b9c9018305c36f4eb42b006eb305b38, type: 3}
     - target: {fileID: 1741473079889392345, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -533,37 +511,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5464052945117513918, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5733846899961626634, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7470657607671868024, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7470657607671868024, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694134595125428347, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694134595125428349, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Color.b
-      value: 0.1764706
-      objectReference: {fileID: 0}
     - target: {fileID: 8191966170685041812, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
       propertyPath: m_Name
       value: Dice Face (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 8191966170685041812, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
@@ -590,14 +540,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5867930011684578217}
     m_Modifications:
-    - target: {fileID: 111433340590879103, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: f48d0727a5d27194090c6f03e0e4a855, type: 3}
-    - target: {fileID: 765958961599580824, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 68107097290794720, guid: f12f243ebbc37114bb58454554574721, type: 3}
     - target: {fileID: 1741473079889392345, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -642,37 +584,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5464052945117513918, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5733846899961626634, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7470657607671868024, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7470657607671868024, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694134595125428347, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694134595125428349, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Color.b
-      value: 0.1764706
-      objectReference: {fileID: 0}
     - target: {fileID: 8191966170685041812, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
       propertyPath: m_Name
       value: Dice Face (5)
-      objectReference: {fileID: 0}
-    - target: {fileID: 8191966170685041812, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
@@ -699,14 +613,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5867930011684578217}
     m_Modifications:
-    - target: {fileID: 111433340590879103, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: ffda09cac6f619f49949a297248d79fa, type: 3}
-    - target: {fileID: 765958961599580824, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 68107097290794720, guid: f12f243ebbc37114bb58454554574721, type: 3}
     - target: {fileID: 1741473079889392345, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
       propertyPath: m_RootOrder
       value: 4
@@ -751,37 +657,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5464052945117513918, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5733846899961626634, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7470657607671868024, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7470657607671868024, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694134595125428347, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694134595125428349, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Color.b
-      value: 0.1764706
-      objectReference: {fileID: 0}
     - target: {fileID: 8191966170685041812, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
       propertyPath: m_Name
       value: Dice Face (4)
-      objectReference: {fileID: 0}
-    - target: {fileID: 8191966170685041812, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
@@ -808,14 +686,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5867930011684578217}
     m_Modifications:
-    - target: {fileID: 111433340590879103, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 8365e5e97ab7f334c97bf38243fe9e44, type: 3}
-    - target: {fileID: 765958961599580824, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 6287797444523802064, guid: 4dd7be37b76d9c14987d3d3f107f7119, type: 3}
     - target: {fileID: 1741473079889392345, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
       propertyPath: m_RootOrder
       value: 3
@@ -860,37 +730,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5464052945117513918, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5733846899961626634, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7470657607671868024, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7470657607671868024, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694134595125428347, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694134595125428349, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Color.b
-      value: 0.1764706
-      objectReference: {fileID: 0}
     - target: {fileID: 8191966170685041812, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
       propertyPath: m_Name
       value: Dice Face (3)
-      objectReference: {fileID: 0}
-    - target: {fileID: 8191966170685041812, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
@@ -917,10 +759,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5867930011684578217}
     m_Modifications:
-    - target: {fileID: 111433340590879103, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Sprite
-      value: 
-      objectReference: {fileID: 21300000, guid: 7970bb8a6202c034bbff407d8af2b0a7, type: 3}
     - target: {fileID: 1741473079889392345, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -965,37 +803,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5464052945117513918, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5733846899961626634, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7470657607671868024, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7470657607671868024, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694134595125428347, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 7694134595125428349, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Color.b
-      value: 0.1764706
-      objectReference: {fileID: 0}
     - target: {fileID: 8191966170685041812, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
       propertyPath: m_Name
       value: Dice Face (2)
-      objectReference: {fileID: 0}
-    - target: {fileID: 8191966170685041812, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}
-      propertyPath: m_Layer
-      value: 6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1653bd042b0a68842bf8b66aea1af422, type: 3}

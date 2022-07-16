@@ -25,12 +25,15 @@ public class DieScript : MonoBehaviour {
     private float diceSize;
 
     public DieFaceCollection myFaces;
+
+    public Die myDie;
     
     private void Awake() {
         rg = GetComponent<Rigidbody>();
         rg.maxAngularVelocity = maxAngularVelocity;
         cl = GetComponent<Collider>();
         diceSize = GetComponent<BoxCollider>().size.x * transform.localScale.x;
+        myFaces.ApplyFaces(myDie);
     }
 
 
@@ -47,9 +50,6 @@ public class DieScript : MonoBehaviour {
         alignment = Mathf.Max(Mathf.Abs(forwardDot), Mathf.Abs(rightDot), Mathf.Abs(upDot));
         isUpright = alignment > uprightSensitivity;
 
-        if (!isMoving && isInBox) {
-            transform.position = GetDieBoxSnapPosition();
-        }
     }
 
     public void TogglePhysics(bool state) {
@@ -58,14 +58,10 @@ public class DieScript : MonoBehaviour {
         cl.enabled = state;
     }
 
-    private bool isInBox;
-    public Transform myDieBox;
-    public Vector3 GetDieBoxSnapPosition() {
-        return myDieBox.position + myDieBox.forward*(diceSize/2f);
-    }
+    private bool isInBox => GetComponent<ItemCarrier>().isSnapping;
     
     public bool canDiceRoll {
-        get { return !(isInBox || isMoving); }
+        get { return !(isInBox || isMoving || isRolling || isDieLockedInSlot); }
     }
 
     public float curRollDetectionCooldown = 0;
@@ -110,6 +106,10 @@ public class DieScript : MonoBehaviour {
         }
         return diceValue;
     }
+
+    public DieFace GetActiveSide() {
+        return myDie.faces[GetActiveSideIndex()];
+    }
     
     class PositionWrapper{
         private readonly bool isDieBox;
@@ -130,16 +130,24 @@ public class DieScript : MonoBehaviour {
         }
     }
 
-    private bool isLocked = false;
+    public bool canDieStillBeActivated = true;
+    public void SetDieCanBeActivatedStatus(bool canBeActivated) {
+        canDieStillBeActivated = canBeActivated;
+        myFaces.SetDieCanBeActivatedStatus(canDieStillBeActivated);
+    }
+
+    public bool isDieLockedInSlot => GetComponent<ItemCarrier>().isLockedInSlot;
+    
+    private bool isRotationLocked = false;
     public void LockRotation(bool _isLocked) {
         
-        if(isLocked == _isLocked)
+        if(isRotationLocked == _isLocked)
             return;
 
-        isLocked = _isLocked;
+        isRotationLocked = _isLocked;
         
         RigidbodyConstraints constraints;
-        if (isLocked) {
+        if (isRotationLocked) {
             constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ;
         } else {
             constraints = RigidbodyConstraints.None;
@@ -150,7 +158,6 @@ public class DieScript : MonoBehaviour {
     
     public void SnapDieIntoField() {
         isMoving = true;
-        isInBox = false;
         StartCoroutine(MoveToPosition(new PositionWrapper(GetEmptyFieldPosition(), false, diceSize), true));
     }
     
@@ -216,17 +223,45 @@ public class DieScript : MonoBehaviour {
     
     public void OnlyShowActiveFace(bool isOn) {
         if (isOn) {
-            var faces = myFaces.myFaces;
+            var faces = myFaces.GetFaces();
             for (int i = 0; i < faces.Length; i++) {
                 faces[i].gameObject.SetActive(false);
             }
 
             faces[GetActiveSideIndex()].gameObject.SetActive(true);
         } else {
-            var faces = myFaces.myFaces;
+            var faces = myFaces.GetFaces();
             for (int i = 0; i < faces.Length; i++) {
                 faces[i].gameObject.SetActive(true);
             }
         }
     }
+}
+
+
+[System.Serializable]
+public class Die {
+    public Color color = Color.white;
+    //public Sprite emptyFace;
+    public DieFace[] faces = new DieFace[6];
+    public DieAffinity myAffinity;
+    public Sprite gfx;
+}
+
+[System.Serializable]
+public class DieFace{
+    //public bool isFilled = true;
+    [SerializeField]
+    private int pips = 1;
+    //public Sprite gfx;
+    
+    public int clampedPips {
+        get {
+            return Mathf.Clamp(pips, 0, 9);
+        }
+        set {
+            pips = value;
+        }
+    }
+
 }

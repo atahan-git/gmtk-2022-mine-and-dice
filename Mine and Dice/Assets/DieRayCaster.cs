@@ -22,9 +22,9 @@ public class DieRayCaster : MonoBehaviour {
                 Debug.DrawRay(ray.GetPoint(0), ray.GetPoint(20));
 
                 if (Physics.Raycast(ray, out RaycastHit hit, 10000, diceLayer)) {
-                    var die = hit.collider.gameObject.GetComponent<ItemCarrier>();
-                    if (die != null) {
-                        die.GetComponent<ItemCarrier>().OnMouseDown();
+                    var itemCarrier = hit.collider.gameObject.GetComponent<ItemCarrier>();
+                    if (itemCarrier != null) {
+                        itemCarrier.GetComponent<ItemCarrier>().OnMouseDown();
 
                         for (int i = 0; i < UIStuff.Count; i++) {
                             UIStuff[i].skipHit = true;

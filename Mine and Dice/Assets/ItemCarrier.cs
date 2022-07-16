@@ -28,6 +28,9 @@ public class ItemCarrier : MonoBehaviour {
     public ItemBox currentSnap;
 
     public ItemType myType;
+    public Ingredients myIngredientType;
+
+    public bool isLockedInSlot = false;
 
     public ItemCarrier SnapToTarget(ItemBox target) {
         ClearSnapping(null);

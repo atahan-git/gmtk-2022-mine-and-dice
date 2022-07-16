@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 public class ItemBox : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
@@ -11,14 +12,22 @@ public class ItemBox : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
 
     public float backOffset = 0.5f;
     
+    public UnityEvent itemAdded = new UnityEvent();
+
     public void OnPointerEnter(PointerEventData eventData) {
         if (ItemCarrier.currentlyBeingCarried != null) {
             if (ItemCarrier.currentlyBeingCarried.myType == myAcceptedType) {
+                var die = ItemCarrier.currentlyBeingCarried.GetComponent<DieScript>();
+                if (die != null) {
+                    die.OnlyShowActiveFace(true);
+                    if (!die.canDieStillBeActivated) {
+                        return;
+
+                    }
+                }
+
+                itemAddedCalled = false;
                 myItem = ItemCarrier.currentlyBeingCarried.SnapToTarget(this);
-               var die = ItemCarrier.currentlyBeingCarried.GetComponent<DieScript>();
-               if (die != null) {
-                   die.OnlyShowActiveFace(true);
-               }
             }
         }
     }
@@ -32,6 +41,18 @@ public class ItemBox : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler 
                     die.OnlyShowActiveFace(false);
                 }
                 myItem = null;
+            }
+        }
+    }
+
+    private bool itemAddedCalled = false;
+    private void Update() {
+        if (!itemAddedCalled) {
+            if (myItem != null) {
+                if (ItemCarrier.currentlyBeingCarried == null) {
+                    itemAdded?.Invoke();
+                    itemAddedCalled = true;
+                }
             }
         }
     }

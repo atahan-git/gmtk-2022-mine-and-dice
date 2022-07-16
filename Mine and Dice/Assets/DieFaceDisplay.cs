@@ -14,8 +14,6 @@ public class DieFaceDisplay : MonoBehaviour {
     [SerializeField]
     private Image noPipsOverlayImg;
     [SerializeField]
-    private Image needsRocketsImg;
-    [SerializeField]
     private Image pipsImg;
 
     [SerializeField]
@@ -24,8 +22,6 @@ public class DieFaceDisplay : MonoBehaviour {
     private SpriteRenderer face;
     [SerializeField]
     private SpriteRenderer noPipsOverlay;
-    [SerializeField]
-    private SpriteRenderer needsRockets;
     [SerializeField]
     private SpriteRenderer pips;
     
@@ -41,28 +37,21 @@ public class DieFaceDisplay : MonoBehaviour {
 
     private Color realBGColor;
 
-    //public DieFace myFace;
+    public DieFace myFace;
 
-    /*public void SetDieFace(Die myDie, DieFace face) {
+    public void SetDieFace(Die myDie, DieFace face) {
         myFace = face;
         SetBGColor(myDie.color);
-        if (myFace.isFilled) {
-            SetFace(myFace.graphicsBlueprint.Sprite);
+        //if (myFace.isFilled) {
+            SetFace(myDie.gfx);
             SetPips(myFace.clampedPips);
             SetNoPipsOverlay(myFace.clampedPips == 0);
-
-            SetNeedsRocketOverlay(myFace.needRockets);
-            if (myFace.needRockets && StateMaster.s.currentState.rockets <= 0) {
-                SetNoPipsOverlay(true);
-            }
-
-        } else {
+        /*} else {
             SetFace(null);
             SetPips(0);
             SetNoPipsOverlay(false);
-            SetNeedsRocketOverlay(false);
-        }
-    }*/
+        }*/
+    }
 
 
     public Color activeBGColor = Color.white;
@@ -80,7 +69,7 @@ public class DieFaceDisplay : MonoBehaviour {
 
     void SetFace(Sprite sprite) {
         if (sprite == null) 
-            sprite = emptyFace;
+            sprite = emptySprite;
         
 
         if (face != null) 
@@ -112,15 +101,6 @@ public class DieFaceDisplay : MonoBehaviour {
             pipsImg.sprite = sprite;
     }
 
-    void SetNeedsRocketOverlay(bool state) {
-
-        if (needsRockets != null)
-            needsRockets.enabled = state;
-
-
-        if (needsRocketsImg != null)
-            needsRocketsImg.enabled = state;
-    }
 
     void SetNoPipsOverlay(bool isNoPips) {
         if (isNoPips) {

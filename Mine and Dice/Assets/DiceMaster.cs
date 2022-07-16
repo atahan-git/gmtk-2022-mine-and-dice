@@ -53,7 +53,7 @@ public class DiceMaster : MonoBehaviour {
     private void Update() {
         isRolling = false;
         for (int i = 0; i < allDice.Count; i++) {
-            isRolling = isRolling || allDice[i].isRolling;
+            isRolling = isRolling || allDice[i].canDiceRoll;
         }
 
         if (isRolling) {
@@ -69,7 +69,19 @@ public class DiceMaster : MonoBehaviour {
                 allDice[i].LockRotation(true);
             }
         }
+
+        if (isRolling) {
+            rollButton.interactable = false;
+            rollText.text = "Wait until all dice are settled";
+        } else {
+            rollButton.interactable = true;
+            rollText.text = "Roll Dice";
+            
+        }
     }
+
+    public Button rollButton;
+    public TMP_Text rollText;
 
     public int dicePosScroll = 0;
 
@@ -93,48 +105,38 @@ public class DiceMaster : MonoBehaviour {
     public RandomAudioClipPlayer diceRollSounds;
 
     public void RollPossibleDice() {
-        for (int i = 0; i < allDice.Count; i++) {
-            var die = allDice[i];
-            if (die.canDiceRoll) {
-                die.LockRotation(false);
-                var randomJumpForce = diceRollArea.transform.TransformDirection(-gravityDirection) * Random.Range(jumpStrength.x, jumpStrength.y);
-                die.rg.AddForce(randomJumpForce);
-                var midPush = (diceRollArea.transform.position - die.transform.position);
-                midPush.z = 0;
-                //midPush = midPush.normalized;
-                midPush *= Random.Range(midPushStrength.x, midPushStrength.y);
-                die.rg.AddForce(midPush);
+        if (!isRolling) {
+            for (int i = 0; i < allDice.Count; i++) {
+                var die = allDice[i];
+                if (die.canDiceRoll) {
+                    die.LockRotation(false);
+                    die.SetDieCanBeActivatedStatus(true);
+                    var randomJumpForce = diceRollArea.transform.TransformDirection(-gravityDirection) * Random.Range(jumpStrength.x, jumpStrength.y);
+                    die.rg.AddForce(randomJumpForce);
+                    var midPush = (diceRollArea.transform.position - die.transform.position);
+                    midPush.z = 0;
+                    //midPush = midPush.normalized;
+                    midPush *= Random.Range(midPushStrength.x, midPushStrength.y);
+                    die.rg.AddForce(midPush);
 
-                var randomPush = Random.insideUnitCircle.normalized * Random.Range(randomPushStrength.x, randomPushStrength.y);
-                die.rg.AddForce(randomPush);
+                    var randomPush = Random.insideUnitCircle.normalized * Random.Range(randomPushStrength.x, randomPushStrength.y);
+                    die.rg.AddForce(randomPush);
 
-                //var randomTorque = Random.onUnitSphere * Random.Range(torqueStrength.x, torqueStrength.y);
-                var randomTorque = Random.insideUnitCircle.normalized * Random.Range(torqueStrength.x, torqueStrength.y);
-                die.rg.AddTorque(new Vector3(randomTorque.x, randomTorque.y, 0), ForceMode.Impulse);
+                    //var randomTorque = Random.onUnitSphere * Random.Range(torqueStrength.x, torqueStrength.y);
+                    var randomTorque = Random.insideUnitCircle.normalized * Random.Range(torqueStrength.x, torqueStrength.y);
+                    die.rg.AddTorque(new Vector3(randomTorque.x, randomTorque.y, 0), ForceMode.Impulse);
 
-                die.curRollDetectionCooldown = die.rollDetectionCooldown;
-                die.isRolling = true;
+                    die.curRollDetectionCooldown = die.rollDetectionCooldown;
+                    die.isRolling = true;
+                }
+
             }
 
+            diceRollSounds.PlayRandomClip();
+            curRollTime = 0;
+            isRolling = true;
         }
-
-        diceRollSounds.PlayRandomClip();
-        curRollTime = 0;
-        isRolling = true;
     }
-
-    public bool CanAllDiceRoll() {
-        for (int i = 0; i < allDice.Count; i++) {
-            var die = allDice[i];
-            if (!die.canDiceRoll) {
-                return false;
-            }
-
-        }
-
-        return !isRolling;
-    }
-
     public void PutDiceInTheRollField() {
         for (int i = 0; i < allDice.Count; i++) {
             allDice[i].SnapDieIntoField();
@@ -154,10 +156,16 @@ public class DiceMaster : MonoBehaviour {
 
 
 public enum DieAffinity {
-    mining, chopping, attacking
+    none, mining, chopping, attacking
 }
 
 
 public enum ItemType {
     die, ingredient, tool
+}
+
+
+
+public enum Ingredients {
+    empty, rock, iron_ore, diamond_ore, wood, coal, iron_ingot, diamond_ingot
 }
