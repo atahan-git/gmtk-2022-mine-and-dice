@@ -39,6 +39,10 @@ public class DiceMaster : MonoBehaviour {
 
     public List<DieScript> allDice = new List<DieScript>();
 
+    private void Start() {
+        //allDice = new List<DieScript>(GameObject.FindObjectsOfType<DieScript>());
+    }
+
 
     void FixedUpdate() {
         for (int i = 0; i < myDice.Count; i++) {
@@ -128,7 +132,7 @@ public class DiceMaster : MonoBehaviour {
 
     public void PutDiceInTheRollField() {
         for (int i = 0; i < allDice.Count; i++) {
-            allDice[i].SnapDieIntoField();
+            //allDice[i].SnapDieIntoField();
 
         }
 
@@ -137,8 +141,13 @@ public class DiceMaster : MonoBehaviour {
 
     public void PutDiceBackToModules() {
         for (int i = 0; i < allDice.Count; i++) {
-            allDice[i].PutDieInDieBox();
+            //allDice[i].PutDieInDieBox();
 
         }
     }
+}
+
+
+public enum DieAffinity {
+    mining, chopping, attacking
 }

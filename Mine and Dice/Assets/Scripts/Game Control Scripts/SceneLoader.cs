@@ -14,9 +14,7 @@ public class SceneLoader : MonoBehaviour {
     
     [SerializeField]
     private SceneReference initialScene;
-
-
-    public bool isProfileMenu = true;
+    
     
     private void Awake() {
         if (s == null) {

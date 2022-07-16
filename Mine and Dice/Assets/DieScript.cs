@@ -94,35 +94,11 @@ public class DieScript : MonoBehaviour {
 
     public bool isMoving = false;
 
-
-    public void SnapDieIntoField() {
-        isMoving = true;
-        isInBox = false;
-        StartCoroutine(MoveToPosition(new PositionWrapper(GetEmptyFieldPosition(), false, diceSize), true));
-    }
-
     public Transform GetEmptyFieldPosition() {
         //return insideBox.ClosestPoint(transform.position);
         return DiceMaster.s.GetEmptyFieldPosition();
     }
 
-    public void PutDieInDieBox(bool isInstant = false) {
-        if (!isInBox || isInstant) {
-            isInBox = true;
-            isMoving = true;
-            if (!isInstant) {
-                StartCoroutine(MoveToPosition(new PositionWrapper(myDieBox, true,diceSize), false));
-            } else {
-                isMoving = false;
-                TogglePhysics(false);
-                transform.position = GetDieBoxSnapPosition();
-                Quaternion rot = alignedRotations[GetActiveSideIndex()];
-                transform.rotation = rot;
-                Update();
-                OnlyShowActiveFace(true);
-            }
-        }
-    }
     
     private const float sensitivity = 0.5f;
     /*public DieFace GetActiveSide(Die myDie) {
@@ -154,23 +130,6 @@ public class DieScript : MonoBehaviour {
         return diceValue;
     }
 
-    public void RemoveDieFromDieBox() {
-        if (isInBox) {
-            isInBox = false;
-            SnapDieIntoField();
-        }
-    }
-
-    public void ToggleDieBoxStatus() {
-        if (!isMoving) {
-            if (isInBox) {
-                RemoveDieFromDieBox();
-            } else {
-                PutDieInDieBox();
-            }
-        }
-    }
-
 
     private readonly Quaternion[] alignedRotations = new[] {
         Quaternion.Euler(0, -90, 0),
@@ -180,35 +139,25 @@ public class DieScript : MonoBehaviour {
         Quaternion.Euler(-90, 0, 0),
         Quaternion.Euler(90, 0, 0)
     };
-    
-    IEnumerator MoveToPosition(PositionWrapper pos, bool enablePhysicsAfter) {
-        OnlyShowActiveFace(false);
-        isMoving = true;
-        TogglePhysics(false);
 
+    public void AlignRotation() {
+        StartCoroutine(AlightRotation());
+    }
+    
+    IEnumerator AlightRotation() {
         yield return null;
-        float time = Vector3.Distance(transform.position, pos.GetPosition()) / moveSpeed;
         Quaternion rot = alignedRotations[GetActiveSideIndex()];
+        var time = 0.2f;
         float rotSpeed = Quaternion.Angle(transform.rotation, rot)/time;
 
 
         while (time > 0) {
-            transform.position = Vector3.MoveTowards(transform.position, pos.GetPosition(), moveSpeed * Time.deltaTime);
             transform.rotation = Quaternion.RotateTowards(transform.rotation, rot, rotSpeed * Time.deltaTime);
             time -= Time.deltaTime;
             yield return null;
         }
 
-        transform.position = pos.GetPosition();
         transform.rotation = rot;
-
-
-        if (enablePhysicsAfter) {
-            TogglePhysics(true);
-        } else {
-            OnlyShowActiveFace(true);
-        }
-        isMoving = false;
     }
 
     void OnlyShowActiveFace(bool isOn) {

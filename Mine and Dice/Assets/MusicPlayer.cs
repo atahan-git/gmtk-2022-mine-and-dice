@@ -60,7 +60,7 @@ public class MusicPlayer : MonoBehaviour {
     }
 
     private void Update() {
-        trackNameAndTime.text = $"{curTrackClip.name} - {curTrackTime:0}/{curTrackClip.length:0}";
+        //trackNameAndTime.text = $"{curTrackClip.name} - {curTrackTime:0}/{curTrackClip.length:0}";
         curTrackTime += Time.deltaTime;
     }
 }
